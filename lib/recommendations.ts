@@ -1,12 +1,24 @@
 // lib/recommendations.ts
 import prisma from './prisma';
-import { Movie, Rating, User } from '@prisma/client';
+import { Movie, Prisma, Rating, User } from '@prisma/client';
 
 /**
  * Content-based recommendation algorithm that suggests movies
  * based on genre preferences and previously highly-rated movies
  */
-export async function getRecommendationsForUser(userId: string, limit: number = 10): Promise<Movie[]> {
+
+
+type MovieWithGenres = Prisma.MovieGetPayload<{
+  include: {
+    genres: {
+      include: {
+        genre: true;
+      }
+    }
+  }
+}>;
+
+export async function getRecommendationsForUser(userId: string, limit: number = 10): Promise<MovieWithGenres[]> {
   try {
     // Get user's genre preferences
     const userGenres = await prisma.userGenre.findMany({
@@ -76,7 +88,7 @@ export async function getRecommendationsForUser(userId: string, limit: number = 
  * Collaborative filtering algorithm that finds similar users
  * and recommends movies they rated highly
  */
-export async function getCollaborativeRecommendations(userId: string, limit: number = 10): Promise<Movie[]> {
+export async function getCollaborativeRecommendations(userId: string, limit: number = 10): Promise<MovieWithGenres[]> {
   try {
     // Get all ratings by this user
     const userRatings = await prisma.rating.findMany({
@@ -167,7 +179,7 @@ export async function getCollaborativeRecommendations(userId: string, limit: num
  * Hybrid recommendation algorithm that combines 
  * content-based and collaborative filtering
  */
-export async function getHybridRecommendations(userId: string, limit: number = 10): Promise<Movie[]> {
+export async function getHybridRecommendations(userId: string, limit: number = 10): Promise<MovieWithGenres[]> {
   try {
     // Get recommendations from both approaches
     const contentBasedRecs = await getRecommendationsForUser(userId, limit);

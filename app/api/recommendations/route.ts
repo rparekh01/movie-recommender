@@ -3,6 +3,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getHybridRecommendations } from '@/lib/recommendations';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { Prisma } from '@prisma/client';
+
+
+type MovieWithGenres = Prisma.MovieGetPayload<{
+  include: {
+    genres: {
+      include: {
+        genre: true;
+      }
+    }
+  }
+}>;
 
 export async function GET(request: NextRequest) {
   try {
