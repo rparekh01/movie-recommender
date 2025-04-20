@@ -161,6 +161,13 @@ export async function getCollaborativeRecommendations(userId: string, limit: num
           },
         },
       },
+      include:{
+        genres:{
+          include:{
+            genre:true
+          },
+        },
+      },
       distinct: ['id'],
       orderBy: [
         { releaseYear: 'desc' },
