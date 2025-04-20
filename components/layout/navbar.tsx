@@ -21,8 +21,8 @@ export function Navbar(){
     return (
         <header className="w-full border-b">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-        <link href="/" className="flex items-center gap-2">
-        <span className="text-xl font-bold"> MovieRecs</span></link>
+        <Link href="/" className="flex items-center gap-2">
+        <span className="text-xl font-bold"> MovieRecs</span></Link>
         <nav className="ml-auto flex items-center gap-4">
           <Link href="/" className="text-sm font-medium hover:underline">
             Home
